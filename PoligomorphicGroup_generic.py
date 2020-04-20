@@ -286,6 +286,7 @@ class PoligomorphicGroup_generic(PoligomorphicGroup):
         return max_size
 
     def _union_finite_ages_per_degree(self):
+        # TODO : add an option domain in order to take the kernel "into account" by avoiding its support
         ages_per_deg = []
         max_deg = self._max_size_of_finite_block()
         ages_per_deg.append([[]])             # orbit of empty set
@@ -344,12 +345,12 @@ class PoligomorphicGroup_generic(PoligomorphicGroup):
         dom_ker =   [None]
         for d in range(1, max_deg+1): # will enable to consider the actions on orbits of degree d(>1)
             # actions on orbits outside the kernel
-            homom.append(libgap.ActionHomomorphism(self.finite_group, finite_orbits[d], libgap.OnSetsSets))
+            homom.append(libgap.ActionHomomorphism(self.diagonal_action(), finite_orbits[d], libgap.OnSetsSets))
             dom.append(list(range(1, len(finite_orbits[d])+1))) # to compute cycle lengths below
             # same with the kernel, if relevant
             if self.has_kernel() :
                 subsets_d = list(Combinations(self.kernel(), d))
-                homom_ker.append(libgap.ActionHomomorphism(self.finite_group, subsets_d, libgap.OnSets)) 
+                homom_ker.append(libgap.ActionHomomorphism(self.diagonal_action(), subsets_d, libgap.OnSets)) 
                 # in the kernel, each set is alone in its K-orbit,
                 # so here (above) sets are identified to their orbits,
                 # hence OnSets rather then OnSetsSets
@@ -360,7 +361,7 @@ class PoligomorphicGroup_generic(PoligomorphicGroup):
             g = libgap.Representative(gbar)      
             # computation of the contribution of g
             W_g = 1
-            for d in range(1, max_deg+1):        
+            for d in range(1, max_deg+1):
             # run through the orbital degrees of the orbits of the H1's
                 g_d = libgap.Image(homom[d], g)  # g acting on the orbits of degree d
                 CT_d = libgap.CycleLengths(g_d, dom[d])
