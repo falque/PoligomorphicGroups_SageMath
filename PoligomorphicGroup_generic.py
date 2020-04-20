@@ -4,13 +4,6 @@
 
 
 class PoligomorphicGroup_generic(PoligomorphicGroup):
-    def is_block(block, system):
-    # TODO: find something more appropriate
-        for b in system:
-            if Set(b) == Set(block):
-                return True
-        return False
-
     def __init__(self, finite_group, block_system=None, block_seed=None, wreath_bases=[], hhomogeneous_groups=[], decorated_block_system=None):
     # wreath_bases = liste de 2-listes, 1er elt = le block dont l'orbite est concernee
     # et 2e elt = le sg normal (ou juste sg dont on prend la cloture normale)
@@ -166,6 +159,14 @@ class PoligomorphicGroup_generic(PoligomorphicGroup):
             if not (isinstance(dbs, list) and all([isinstance(decor_block, list) for decor_block in dbs])):
                 raise TypeError("not good")
             # self.decorations = ...
+
+    def is_block(block, system):
+    # TODO: find something more appropriate
+        for b in system:
+            if Set(b) == Set(block):
+                return True
+        return False
+
 
     ####
     # Methods for accessing attributes and data
